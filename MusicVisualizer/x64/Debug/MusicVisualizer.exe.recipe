@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\x64\Debug\MusicVisualizer.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\forever mst.mp3</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\forever mst.wav</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\killme.mp3</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\samplestostudy.mp3</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\shockwavesmastered.wav</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\sunsetfmastered.wav</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\swaves.mp3</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>
