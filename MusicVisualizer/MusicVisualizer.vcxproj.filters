@@ -61,5 +61,8 @@
     <Media Include="samplestostudy.mp3">
       <Filter>Source Files</Filter>
     </Media>
+    <Media Include="springcmastered.mp3">
+      <Filter>Source Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

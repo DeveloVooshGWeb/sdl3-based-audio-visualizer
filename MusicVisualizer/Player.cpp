@@ -4,7 +4,7 @@
 
 #define FREQ_START 34
 #define FREQ_END 19044
-#define FFT_SIZE 5120
+#define FFT_SIZE 1024
 
 streamData* Player::specData = (streamData*)malloc(sizeof(streamData));
 int Player::len = 0;
@@ -100,9 +100,9 @@ void Player::init()
 		isRunning = false;
 		return;
 	}
-	specData->p = fftw_plan_dft_r2c_1d(FFT_SIZE, specData->in, specData->out, FFTW_MEASURE);
+	specData->p = fftw_plan_dft_r2c_1d(FFT_SIZE, specData->in, specData->out, FFTW_ESTIMATE);
 	// Load MP3 to buffer;
-	if (!loadMP3("samplestostudy.mp3")) return;
+	if (!loadMP3("forever mst.mp3")) return;
 	//if (!loadWAV("sunsetfmastered.wav")) return;
 	// Load WAV to buffer
 	sampleRatio = FFT_SIZE / (double)audioSpec.freq;
@@ -233,7 +233,7 @@ void Player::update(double delta)
 		rectangles[i].y = 960;
 		rectangles[i].w = BAR_WIDTH;
 		// Create a multiplier magnitude value
-		double f = (10.0 * log10(spectrum[i]) / 48.0); //i * ((log10(FREQ_END) - log10(FREQ_START)) / (buckets))) / 24.0; //(i + 1))) / 32.0; //(10.0 * log10(maxFreqs[i] * (buckets-i))) / 24.0;
+		double f = (10.0 * log10(spectrum[i]) / 24.0); //i * ((log10(FREQ_END) - log10(FREQ_START)) / (buckets))) / 24.0; //(i + 1))) / 32.0; //(10.0 * log10(maxFreqs[i] * (buckets-i))) / 24.0;
 		float h = f * -180.0;
 		rectangles[i].h = lerp(rectangles[i].h, h > -4.0 ? -4.0 : h, delta * 12.0);
 		SDL_RenderFillRect(renderer, &rectangles[i]);
