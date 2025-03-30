@@ -9,8 +9,6 @@
 streamData* Player::specData = (streamData*)malloc(sizeof(streamData));
 int Player::len = 0;
 SDL_AudioSpec Player::audioSpec = SDL_AudioSpec();
-float* Player::audioFrames = (float*)malloc(sizeof(float) * FFT_SIZE * 8);
-float* Player::cBuf = (float*)malloc(sizeof(float) * 4096);
 int Player::currentFrameSize = 0;
 int Player::frameCount = 0;
 bool Player::mustCall = false;
@@ -89,6 +87,22 @@ bool Player::loadWAV(string path)
 	return true;
 }
 
+double Player::logint(double a, double b, double f)
+{
+	return a * pow(b / a, f);
+}
+
+double Player::clamp(double a, double b, double c)
+{
+	return max(min(a, c), b);
+}
+
+double Player::toDb(double a)
+{
+	if (a > 0.0) return 20.0 * log10(a);
+	return DB_MIN;
+}
+
 void Player::init()
 {
 	specData->in = (double*)malloc(sizeof(double) * FFT_SIZE);
@@ -134,23 +148,35 @@ void Player::init()
 		return;
 	}
 	// Create pools along with frequency bins for each bucket
-	freqBin = (double*)malloc((buckets + 1) * sizeof(double));
-	spectrum = (double*)malloc(buckets * sizeof(double));
+	bandIndices = (double*)malloc(bands * sizeof(double));
+	bandWidths = (short*)malloc(bands * sizeof(short));
+	//magnitudes = (double*)malloc(bands * sizeof(double));
+	decibelsBuf = (double*)malloc(FFT_SIZE / 2 * sizeof(double));
+	decibels = (double*)malloc(bands * sizeof(double));
 	//normalSpectrum = (double*)malloc((FFT_SIZE / 2) * sizeof(double));
 	//sizes = (int*)malloc(buckets * sizeof(int));
-	binSpacing = (FREQ_END - FREQ_START) / buckets;
+	//binSpacing = (FREQ_END - FREQ_START) / bands;
 	// Iterate frequency bins
-	double logMin = log10(FREQ_START);
-	double logMax = log10(FREQ_END);
-	for (int i = 0; i < buckets; i++)
+	//double logMin = log10(FREQ_START);
+	//double logMax = log10(FREQ_END);
+	double lastBin = (FFT_SIZE / 2.0) - 1;
+	double freqStart = clamp(FREQ_START * FFT_SIZE / audioSpec.freq, 1.0, lastBin);
+	double freqEnd = clamp(FREQ_END * FFT_SIZE / audioSpec.freq, 1.0, lastBin);
+	for (int i = 0; i < bands+1; i++)
+	{
+		
+		bandIndices[i] = clamp(logint(freqStart, freqEnd, (double)i / bands), freqStart, freqEnd);
+		//double t = (double)i / bands;
+		// Logarithmic spacing
+		//freqBin[i] = pow(10, logMin + t * (logMax - logMin));
+	}
+	for (int i = 0; i < bands; i++)
 	{
 		rectangles.push_back(SDL_FRect());
-		spectrum[i] = 0; //1.7E-308;
-		double t = (double)i / buckets;
-		// Logarithmic spacing
-		freqBin[i] = pow(10, logMin + t * (logMax - logMin));
+		magnitudes[i] = 0; //1.7E-308;
+		bandWidths[i] = max((int)bandIndices[i + 1] - bandIndices[i], 1);
 	}
-	freqBin[buckets] = FREQ_END;
+	//freqBin[bands] = FREQ_END;
 	
 }
 
@@ -194,9 +220,9 @@ void Player::update(double delta)
 		// Get overall peak values
 		//double peakmax = 1.7E-308;
 		//int max_index = -1;
-		for (int i = 0; i < buckets; i++)
+		for (int i = 0; i < bands; i++)
 		{
-			spectrum[i] = 0;
+			magnitudes[i] = 0;
 			//sizes[i] = 0;
 		}
 		int minIdx = 0;
@@ -212,7 +238,7 @@ void Player::update(double delta)
 
 			double freq = i * (double)audioSpec.freq / FFT_SIZE;
 			//cout << freq << endl;
-			for (int j = 0; j < buckets; j++)
+			for (int j = 0; j < bands; j++)
 			{
 				if (freq >= freqBin[j] && freq < freqBin[j + 1])
 				{

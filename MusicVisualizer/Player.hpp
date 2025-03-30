@@ -43,12 +43,10 @@ public:
 	static streamData* specData;
 	static void SDLCALL onAudioData(void* userdata, const SDL_AudioSpec* spec, float* buffer, int buflen);
 	static SDL_AudioSpec audioSpec;
-	static float* audioFrames;
-	static float* cBuf;
 	static int frameCount;
 	static int currentFrameSize;
 	static int bytesElapsed;
-	int buckets = 42;
+	int bands = 42;
 
 	void init();
 	void eventCall(SDL_Event event);
@@ -61,6 +59,10 @@ public:
 	bool loadMP3(string path);
 	bool loadWAV(string path);
 	float lerp(float a, float b, float f);
+	double logint(double a, double b, double f);
+	double clamp(double a, double b, double c);
+	double toDb(double a);
+	const double DB_MIN = 20.0f * std::log10(std::numeric_limits<float>::min());
 	
 	bool running() { return isRunning; };
 
@@ -72,8 +74,12 @@ private:
 	//vector<double> magnitudes;
 	vector<SDL_FRect> rectangles;
 	SDL_AudioDeviceID audioDevice;
-	double* freqBin;
-	double* spectrum;
+	//double* freqBin;
+	double* bandIndices;
+	short* bandWidths;
+	//double* magnitudes;
+	double* decibelsBuf;
+	double* decibels;
 	//double* normalSpectrum;
 	//int* sizes;
 	SDL_AudioStream* audioStream;
