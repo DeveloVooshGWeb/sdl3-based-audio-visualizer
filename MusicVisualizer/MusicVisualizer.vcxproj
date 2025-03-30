@@ -138,11 +138,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="FFTProcessor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Sound.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FFTProcessor.hpp" />
     <ClInclude Include="minimp3.h" />
     <ClInclude Include="minimp3_ex.h" />
     <ClInclude Include="Player.hpp" />
