@@ -1,6 +1,10 @@
 #ifndef Player_hpp
 #define Player_hpp
 #define _USE_MATH_DEFINES
+#define FREQ_START 34
+#define FREQ_END 19044
+#define FFT_SIZE 512
+
 #define BAR_WIDTH 6.0
 #define BAR_SPACE 3.0
 
@@ -15,6 +19,7 @@
 #include <iostream>
 #include <math.h>
 #include <algorithm>
+#include "FFTProcessor.hpp"
 
 using namespace std;
 
@@ -46,7 +51,7 @@ public:
 	static int frameCount;
 	static int currentFrameSize;
 	static int bytesElapsed;
-	int bands = 42;
+	int bands = 64;
 
 	void init();
 	void eventCall(SDL_Event event);
@@ -58,37 +63,34 @@ public:
 	void stopSound();
 	bool loadMP3(string path);
 	bool loadWAV(string path);
-	float lerp(float a, float b, float f);
-	double logint(double a, double b, double f);
-	double clamp(double a, double b, double c);
-	double toDb(double a);
-	const double DB_MIN = 20.0f * std::log10(std::numeric_limits<float>::min());
 	
 	bool running() { return isRunning; };
 
 private:
-	bool bully2 = false;
-	bool isRunning = true;
+	FFTProcessor* processor;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	//vector<double> magnitudes;
 	vector<SDL_FRect> rectangles;
 	SDL_AudioDeviceID audioDevice;
 	//double* freqBin;
+	double* bins;
 	double* bandIndices;
-	short* bandWidths;
+	uint16_t* bandWidths;
 	//double* magnitudes;
-	double* decibelsBuf;
-	double* decibels;
+	//double* decibelsBuf;
+	//double* decibels;
+	double* spectrum;
 	//double* normalSpectrum;
 	//int* sizes;
 	SDL_AudioStream* audioStream;
 	//int16_t* audBufferTmp;
 	void* audBuffer;
 	int audSize;
-	double binSpacing;
-	
 	double sampleRatio;
+	
+
+	bool isRunning = true;
 };
 
 #endif
