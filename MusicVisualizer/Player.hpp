@@ -3,7 +3,7 @@
 #define _USE_MATH_DEFINES
 #define FREQ_START 30
 #define FREQ_END 19050
-#define FFT_SIZE 2048
+#define FFT_SIZE 1024
 
 #define BAR_WIDTH 6.0
 #define BAR_SPACE 3.0
@@ -51,7 +51,7 @@ public:
 	static int frameCount;
 	static int currentFrameSize;
 	static int bytesElapsed;
-	int bands = 64;
+	uint16_t bands = 64;
 
 	void init();
 	void eventCall(SDL_Event* event);
@@ -75,8 +75,7 @@ private:
 	SDL_AudioDeviceID audioDevice;
 	//double* freqBin;
 	double* bins;
-	double* bandIndices;
-	double* bandWidths;
+	double* bandFreqs;
 	//double* magnitudes;
 	//double* decibelsBuf;
 	//double* decibels;

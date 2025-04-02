@@ -14,14 +14,14 @@ using namespace std;
 class FFTProcessor
 {
 public:
-	FFTProcessor(size_t sr, uint16_t ffts, uint16_t bs);
+	FFTProcessor(size_t sr, uint16_t ffts, uint16_t bs, uint16_t fStart, uint16_t fEnd);
 	~FFTProcessor();
 
 	double lerp(double a, double b, double f);
 	double logint(double a, double b, double f);
 	double clamp(double a, double b, double c);
 	double toDb(double a);
-	void assign(double* bandIndices, double* bandWidths, float t, double emaValue);
+	void assign(double* bandFreqs, float t, double emaValue);
 	void pipe(double* bins, double* output);
 	uint16_t getBinSize();
 
@@ -31,7 +31,8 @@ private:
 	void _generateCatmullRomWeights(float t);
 	void _transformToDb();
 	void _smoothingExponentialMovingAverage(double* output);
-	void _interpolateCatmullRom();
+	void _interpolateCatmullRom(double* output);
+	void _extractHighestMagnitudes(double* output);
 	void _genericFunction(double* output);
 
 	size_t _sampleRate;
@@ -40,11 +41,12 @@ private:
 	uint16_t _bands;
 	double* _prevBands;
 	double* _bins;
-	double* _bandIndices;
-	double* _bandWidths;
+	double* _bandFreqs;
 	float* _splineWeights;
 	double _emaValue;
 	double* _curBands;
+	uint16_t _freqStart;
+	uint16_t _freqEnd;
 };
 
 #endif
