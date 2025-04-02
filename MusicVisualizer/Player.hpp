@@ -1,9 +1,9 @@
 #ifndef Player_hpp
 #define Player_hpp
 #define _USE_MATH_DEFINES
-#define FREQ_START 34
-#define FREQ_END 19044
-#define FFT_SIZE 512
+#define FREQ_START 30
+#define FREQ_END 19050
+#define FFT_SIZE 2048
 
 #define BAR_WIDTH 6.0
 #define BAR_SPACE 3.0
@@ -54,7 +54,7 @@ public:
 	int bands = 64;
 
 	void init();
-	void eventCall(SDL_Event event);
+	void eventCall(SDL_Event* event);
 	void update(double delta);
 	void draw(double delta);
 	void clean();
@@ -76,7 +76,7 @@ private:
 	//double* freqBin;
 	double* bins;
 	double* bandIndices;
-	uint16_t* bandWidths;
+	double* bandWidths;
 	//double* magnitudes;
 	//double* decibelsBuf;
 	//double* decibels;

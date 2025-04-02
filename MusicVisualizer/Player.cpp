@@ -96,7 +96,7 @@ void Player::init()
 	}
 	specData->p = fftw_plan_dft_r2c_1d(FFT_SIZE, specData->in, specData->out, FFTW_ESTIMATE);
 	// Load MP3 to buffer;
-	if (!loadMP3("swaves.mp3")) return;
+	if (!loadMP3("forever mst.mp3")) return;
 	//if (!loadWAV("sunsetfmastered.wav")) return;
 	// Load WAV to buffer
 	sampleRatio = FFT_SIZE / (double)audioSpec.freq;
@@ -133,7 +133,7 @@ void Player::init()
 	bins = (double*)malloc(processor->getBinSize() * sizeof(double));
 	size_t indiceAmt = bands + 1;
 	bandIndices = (double*)malloc((indiceAmt +1) * sizeof(double));
-	bandWidths = (uint16_t*)malloc(bands * sizeof(uint16_t));
+	bandWidths = (double*)malloc(bands * sizeof(double));
 	//magnitudes = (double*)malloc(bands * sizeof(double));
 	//decibelsBuf = (double*)malloc(FFT_SIZE / 2 * sizeof(double));
 	//decibels = (double*)malloc(bands * sizeof(double));
@@ -149,7 +149,7 @@ void Player::init()
 	double freqEnd = processor->clamp(FREQ_END * FFT_SIZE / sampleRatio, 1.0, lastBin);
 	for (int i = 0; i < indiceAmt; i++)
 	{
-		bandIndices[i] = processor->clamp(processor->logint(freqStart, freqEnd, (double)i / bands), freqStart, freqEnd);
+		bandIndices[i] = processor->clamp(processor->logint(FREQ_START, FREQ_END, (double)i / bands), FREQ_START, FREQ_END);
 		
 		//double t = (double)i / bands;
 		// Logarithmic spacing
@@ -160,11 +160,12 @@ void Player::init()
 	{
 		rectangles.push_back(SDL_FRect());
 		//magnitudes[i] = 0; //1.7E-308;
-		bandWidths[i] = max(bandIndices[i + 1] - bandIndices[i], 1);
+		bandWidths[i] = max((bandIndices[i + 1] - bandIndices[i]), 1);
+		cout << bandWidths[i] << endl;
 	}
 	//freqBin[bands] = FREQ_END;
 	
-	processor->assign(bandIndices, bandWidths, 0.5, 0.75);
+	processor->assign(bandIndices, bandWidths, 0.5, 0.45);
 }
 
 void Player::playSound()
@@ -177,9 +178,9 @@ void Player::stopSound()
 	SDL_PauseAudioStreamDevice(audioStream);
 }
 
-void Player::eventCall(SDL_Event event)
+void Player::eventCall(SDL_Event* event)
 {
-	switch (event.type) {
+	switch (event->type) {
 		case SDL_EVENT_QUIT:
 			SDL_Log("SDL3 event quit");
 			isRunning = false;
@@ -240,6 +241,7 @@ void Player::update(double delta)
 			double imag = specData->out[i][1];
 			double magnitude = sqrt(real * real + imag * imag);
 			bins[i] = magnitude;
+			//bins[i] = processor->toDb(magnitude);
 		}
 		processor->pipe(bins, spectrum);
 		bytesElapsed = 0;

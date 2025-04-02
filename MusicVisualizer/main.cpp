@@ -4,7 +4,6 @@
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
-static SDL_Event event;
 
 Uint64 ticks = 0;
 
@@ -28,8 +27,10 @@ int main() {
 	}
 	Player player = Player(window, renderer);
 	player.init();
+	SDL_Event* event;
+	event = new SDL_Event;
 	while (player.running()) {
-		while (SDL_PollEvent(&event)) {
+		while (SDL_PollEvent(event)) {
 			player.eventCall(event);
 		}
 		double delta = (double)((SDL_GetTicks() - ticks)) / 1000;
