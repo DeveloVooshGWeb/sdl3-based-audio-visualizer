@@ -54,8 +54,8 @@ D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualize
 D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(103,27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
 D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(107,4): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
 D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(132,31): warning C4244: 'argument': conversion from 'double' to 'size_t', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(245,90): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(251,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(252,12): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(253,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(209,90): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(215,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(216,12): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(217,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   MusicVisualizer.vcxproj -> D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\x64\Debug\MusicVisualizer.exe

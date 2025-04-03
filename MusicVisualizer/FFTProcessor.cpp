@@ -211,7 +211,7 @@ static double catmullRom(double* p0, double* p1, double* p2, double* p3, double 
 	double t2 = getKnotInterval(a, p1, p2) + t1;
 	double t3 = getKnotInterval(a, p2, p3) + t2;
 	//t = lerp(t1, t2, t);
-	double t = (x - p0[0]) / p3[0];
+	double t = (x - p0[0]) / (p3[0] - p0[0]);
 	//cout << "t: " << t << endl;
 	double u = lerp(t1, t2, t);
 	double A1 = (t1 - u) / (t1 - t0) * p0[1] + (u - t0) / (t1 - t0) * p1[1];
@@ -230,14 +230,12 @@ static double catmullRom(double* p0, double* p1, double* p2, double* p3, double 
 
 void FFTProcessor::_interpolateCatmullRom(double* output)
 {
-	double coeff = (double)_sampleRate / _bands;
-	double idx, t, len, sum, mag;
+	double mag, lastFreq, lastMag, curFreq, cRealFreq;
+	uint16_t lastU;
 	uint16_t u = 0;
 	double points[4][2] = { { 0.0, 0.0 }, { 0.0, 0.0 }, { 0.0, 0.0 }, { 0.0, 0.0 } };
-	double x0, x1, y0, y1;
 	uint16_t* realFreq = (uint16_t*)malloc(_bands * sizeof(uint16_t));
 	double* realMag = (double*)malloc(_bands * sizeof(double));
-	double lastFreq, lastMag, curFreq, rFreq;
 	uint16_t realSz = 0;
 	for (uint16_t i = 0; i < _bands; i++)
 	{
@@ -249,9 +247,10 @@ void FFTProcessor::_interpolateCatmullRom(double* output)
 	}
 	for (uint16_t i = 0; i < _bands; i++)
 	{
-		/*
+		
 		mag = output[i];
 		curFreq = _bandFreqs[i];
+		cRealFreq = realFreq[u];
 		if (u == 0)
 		{
 			points[0][0] = -realFreq[0];
@@ -262,64 +261,53 @@ void FFTProcessor::_interpolateCatmullRom(double* output)
 			points[0][0] = realFreq[u - 1];
 			points[0][1] = realMag[u - 1];
 		}
-		rFreq = realFreq[u];
-		points[1][0] = rFreq;
+		cRealFreq = realFreq[u];
+		points[1][0] = cRealFreq;
 		points[1][1] = realMag[u];
-		points[2][0] = realFreq[u < realSz - 1 ? u + 1 : u];
-		points[2][1] = realMag[u < realSz - 1 ? u + 1 : u];
-		points[3][0] = realFreq[u < realSz - 2 ? u + 2 : u];
-		points[3][1] = realMag[u < realSz - 2 ? u + 2 : u];
-		//cout << "INFO: " << i << " |" << endl << "\tX: " << points[0][0] << " | Y: " << points[0][1] << endl << "\tX: " << points[1][0] << " | Y: " << points[1][1] << endl << "\tX: " << points[2][0] << " | Y: " << points[2][1] << endl << "\tX: " << points[3][0] << " | Y: " << points[3][1] << endl;
+		lastU = u < realSz - 1 ? u + 1 : u;
+		points[2][0] = realFreq[lastU];
+		points[2][1] = realMag[lastU];
+		points[3][0] = realFreq[u < realSz - 2 ? u + 2 : lastU];
+		points[3][1] = realMag[u < realSz - 2 ? u + 2 : lastU];
 		double curvePoint = catmullRom(points[0], points[1], points[2], points[3], curFreq, 0.5);
-		//cout << "CURVE " << i << ": " << curvePoint << " | X: " << curFreq << endl;
-		bool yething = mag <= -DBL_MAX;
-		//cout << i << " interpolated: " << yething << endl;
 		output[i] = curvePoint;
-		if (mag > -DBL_MAX)
+		if (i > 0.0 && mag > -DBL_MAX)
 		{
 			u++;
 		}
-		*/
+	}
+	free(realFreq);
+	free(realMag);
+}
+
+void FFTProcessor::_interpolateLinear(double* output)
+{
+	double x0, x1, y0, y1, curFreq, mag;
+	uint16_t u = 0;
+	uint16_t* realFreq = (uint16_t*)malloc(_bands * sizeof(uint16_t));
+	double* realMag = (double*)malloc(_bands * sizeof(double));
+	uint16_t realSz = 0;
+	for (uint16_t i = 0; i < _bands; i++)
+	{
 		mag = output[i];
-		/*
-		curFreq = _bandFreqs[i];
-		x0 = realFreq[u];
-		x1 = realFreq[min(realSz - 1, u + 1)];
-		y0 = realFreq[u];
-		y1 = realFreq[min(realSz - 1, u + 1)];
-		bool yething = mag <= -DBL_MAX;
-		cout << "INFO: " << i << " |" << endl
-			<< "\tX0: " << x0 << " | Y0: " << y0 << endl
-			<< "\tX1: " << x1 << " | Y1: " << y1 << endl
-			<< "\tCFreq: " << curFreq << endl
-			<< "\tinterpolated: " << yething << endl << endl;
-		output[i] = (((curFreq - x0) / (x1 - x0)) * (y1 - y0)) + y0;
-		if (i > 0 && mag >= 0.0)
-		{
-			u++;
-		}
-		*/
+		if (mag <= -DBL_MAX) continue;
+		realFreq[realSz] = _bandFreqs[i];
+		realMag[realSz] = mag;
+		realSz++;
+	}
+	for (uint16_t i = 0; i < _bands; i++)
+	{
+		mag = output[i];
 		if (mag <= -DBL_MAX)
 		{
 			curFreq = _bandFreqs[i];
-			//double nextFreq = _bandFreqs[i + 1];
-			double m = curFreq;
-			//double z = nextFreq / ((double)_sampleRate / _fftSize);
-			double v = floor(m);
+			double z = curFreq;
+			double w = floor(z);
 			x0 = realFreq[u];
 			x1 = realFreq[min(realSz - 1, u + 1)];
 			y0 = realMag[u];
 			y1 = realMag[min(realSz - 1, u + 1)];
-			//cout << "DEBUG (" << i << ")" << " | u(" << u << ") - " << x1 << " - " << x0 << endl;
-			double t = (m - x0) / (x1-x0);
-			//bool yething = mag <= -DBL_MAX;
-			/*cout << "INFO: " << i << " |" << endl
-				<< "\tX0: " << x0 << " | Y0: " << y0 << endl
-				<< "\tX1: " << x1 << " | Y1: " << y1 << endl
-				<< "\tCFreq: " << curFreq << endl
-				<< "\tCalc: " << y0 + ((y1 - y0) * t) << endl
-				<< "\tinterpolated: " << yething << endl << endl;*/
-			output[i] = y0 + ((y1 - y0) * t);
+			output[i] = y0 + ((y1 - y0) * ((z - x0) / (x1 - x0)));
 		}
 		else if (i > 0)
 		{
@@ -328,32 +316,6 @@ void FFTProcessor::_interpolateCatmullRom(double* output)
 	}
 	free(realFreq);
 	free(realMag);
-	/*
-	for (uint16_t i = 0; i < _bands; i++)
-	{
-		idx = _bandFreqs[i];
-		len = 0;
-		t = idx - floor(idx);
-		//sum = 0.0;
-		for (uint16_t j = 0; j < len; j++, idx += 1.0)
-		{
-			idxI = (uint16_t)idx;
-			if (idxI < (int)_bandFreqs[0]) {
-				points[0] = 0.0;
-			}
-			else
-			{
-				points[0] = _bins[idxI - 1];
-			}
-			points[1] = _bins[idxI];
-			points[2] = _bins[min(_binSize - 1, idxI + 1)];
-			points[3] = _bins[min(_binSize - 1, idxI + 2)];
-			double rom = catmullRom(points[0], points[1], points[2], points[3], t, 0.5);
-			if (rom > output[i]) output[i] = rom;
-		}
-		//_curBands[i] = sum / len;
-	}
-	*/
 }
 
 uint16_t FFTProcessor::getBinSize()

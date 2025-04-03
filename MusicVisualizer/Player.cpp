@@ -96,7 +96,7 @@ void Player::init()
 	}
 	specData->p = fftw_plan_dft_r2c_1d(FFT_SIZE, specData->in, specData->out, FFTW_ESTIMATE);
 	// Load MP3 to buffer;
-	if (!loadMP3("swaves.mp3")) return;
+	if (!loadMP3("forever mst.mp3")) return;
 	//if (!loadWAV("sunsetfmastered.wav")) return;
 	// Load WAV to buffer
 	sampleRatio = FFT_SIZE / (double)audioSpec.freq;
@@ -140,8 +140,8 @@ void Player::init()
 	//sizes = (int*)malloc(buckets * sizeof(int));
 	//binSpacing = (FREQ_END - FREQ_START) / bands;
 	// Iterate frequency bins
-	//double logMin = log10(FREQ_START);
-	//double logMax = log10(FREQ_END);
+	double logMin = log10(FREQ_START);
+	double logMax = log10(FREQ_END);
 	double lastBin = processor->getBinSize() - 1;
 	double freqStart = processor->clamp(FREQ_START * FFT_SIZE / sampleRatio, 1.0, lastBin);
 	double freqEnd = processor->clamp(FREQ_END * FFT_SIZE / sampleRatio, 1.0, lastBin);
@@ -150,15 +150,15 @@ void Player::init()
 		rectangles.push_back(SDL_FRect());
 		bandFreqs[i] = processor->clamp(processor->logint(FREQ_START, FREQ_END, (double)i / bands), FREQ_START, FREQ_END);
 		
-		//double t = (double)i / bands;
+		double t = (double)i / bands;
 		// Logarithmic spacing
-		//bandIndices[i] = pow(10, logMin + t * (logMax - logMin)) / (sampleRatio / FFT_SIZE);
+		//bandFreqs[i] = pow(10, logMin + t * (logMax - logMin));
 		//cout << bandFreqs[i] << endl;
 	}
 	bandFreqs[bands] = FREQ_END;
 	//freqBin[bands] = FREQ_END;
 	
-	processor->assign(bandFreqs, 0.5, 0.45);
+	processor->assign(bandFreqs, 0.5, 0.6);
 }
 
 void Player::playSound()
@@ -191,42 +191,6 @@ void Player::update(double delta)
 		// Execute FFT
 		fftw_execute(specData->p);
 		string toPrint = "";
-		// Prepare rendering
-		
-		// Get overall peak values
-		//double peakmax = 1.7E-308;
-		//int max_index = -1;
-		/*for (int i = 0; i < bands; i++)
-		{
-			//magnitudes[i] = 0;
-			//sizes[i] = 0;
-		}
-		int minIdx = 0;
-		int maxIdx = 0;
-		float maxM = 0;
-		int lastBucket = 0;
-		// Calculate maximum magnitudes for each bucket
-		for (int i = 0; i < FFT_SIZE / 2.0; i++)
-		{
-			double real = specData->out[i][0];
-			double imag = specData->out[i][1];
-			double magnitude = sqrt(real * real + imag * imag);
-
-			double freq = i * (double)audioSpec.freq / FFT_SIZE;
-			//cout << freq << endl;
-			for (int j = 0; j < bands; j++)
-			{
-				if (freq >= freqBin[j] && freq < freqBin[j + 1])
-				{
-					if (magnitude > spectrum[j])
-					{
-						spectrum[j] = magnitude;
-						break;
-					}
-				}
-			}
-		}*/
-		
 		// Calculate magnitudes
 		for (size_t i = 0; i < processor->getBinSize(); i++)
 		{
@@ -246,12 +210,22 @@ void Player::update(double delta)
 		rectangles[i].y = 960;
 		rectangles[i].w = BAR_WIDTH;
 		// Create a multiplier magnitude value
-		double f = 10.0 * log10(spectrum[i]*(i*0.5+1)) / 32.0; //24.0; //i * ((log10(FREQ_END) - log10(FREQ_START)) / (buckets))) / 24.0; //(i + 1))) / 32.0; //(10.0 * log10(maxFreqs[i] * (buckets-i))) / 24.0;
+		double f = 10.0 * log10(spectrum[i]*(i*0.01+1)) / 24.0; //24.0; //i * ((log10(FREQ_END) - log10(FREQ_START)) / (buckets))) / 24.0; //(i + 1))) / 32.0; //(10.0 * log10(maxFreqs[i] * (buckets-i))) / 24.0;
 		//cout << f << endl;
 		float h = f * -180.0;
 		h = isnan(h) ? -4.0 : h;
 		rectangles[i].h = h > -4.0 ? -4.0 : h; //lerp(rectangles[i].h, h > -4.0 ? -4.0 : h, delta * 12.0);
 		SDL_RenderFillRect(renderer, &rectangles[i]);
+		if (i > 0)
+		{
+			//SDL_RenderLine(renderer, rectangles[i - 1].x, rectangles[i - 1].y + rectangles[i - 1].h, rectangles[i].x, rectangles[i].y + rectangles[i].h);
+		}
+		//SDL_RenderPoint(renderer, rectangles[i].x, rectangles[i].y + rectangles[i].h);
+	}
+	for (int i = 0; i < FFT_SIZE/2.0; i++)
+	{
+		double pain = processor->toDb(bins[i]);
+		//SDL_RenderPoint(renderer, 1920.0/2.0 - (i-(FFT_SIZE / 2.0/2.0))*1.0, pain+256.0);
 	}
 	// Render
 	SDL_RenderPresent(renderer);

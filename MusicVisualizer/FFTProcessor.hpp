@@ -34,6 +34,7 @@ private:
 	void _interpolateCatmullRom(double* output);
 	void _extractHighestMagnitudes(double* output);
 	void _genericFunction(double* output);
+	void _interpolateLinear(double* output);
 
 	size_t _sampleRate;
 	uint16_t _fftSize;
