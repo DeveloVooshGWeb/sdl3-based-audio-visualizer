@@ -31,9 +31,10 @@ void SDLCALL Player::onAudioData(void* userdata, const SDL_AudioSpec* spec, floa
 		bytesElapsed += actualSize;
 		if (bytesElapsed > FFT_SIZE)
 		{
-			actualSize = (bytesElapsed - FFT_SIZE);
+			actualSize = FFT_SIZE;
 			bytesElapsed = FFT_SIZE;
 		}
+		//cout << actualSize << endl;
 		for (int i = 0; i < actualSize; i++)
 		{
 			// Hann Function
