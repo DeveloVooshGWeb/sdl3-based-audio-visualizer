@@ -1,6 +1,7 @@
 #include "SDL3/SDL.h"
 //#include "SDL3/SDL_main.h"
 #include "components/Player.hpp"
+#include "components/Exporter.hpp"
 
 static SDL_Window* window = NULL;
 static SDL_Renderer* renderer = NULL;
@@ -9,7 +10,8 @@ Uint64 ticks = 0;
 
 #define WINDOW_WIDTH 1920
 #define WINDOW_HEIGHT 1080
-#define FRAMERATE 60
+//#define FRAMERATE 60
+#define FRAMERATE 1000
 
 const float fps = 1000 / FRAMERATE;
 
@@ -25,21 +27,23 @@ int main() {
 	{
 		return -1;
 	}
-	Player player = Player(window, renderer);
-	player.init();
+	//Player player = Player(window, renderer);
+	//player.init();
+	Exporter exporter = Exporter(window, renderer, WINDOW_WIDTH, WINDOW_HEIGHT, 60);
+	exporter.init();
 	SDL_Event* event;
 	event = new SDL_Event;
-	while (player.running()) {
+	while (exporter.running()) {
 		while (SDL_PollEvent(event)) {
-			player.eventCall(event);
+			exporter.eventCall(event);
 		}
 		double delta = (double)((SDL_GetTicks() - ticks)) / 1000;
-		player.update(delta);
-		player.draw(delta);
+		exporter.update(delta);
+		exporter.draw(delta);
 		ticks = SDL_GetTicks();
 		SDL_Delay(fps);
 	}
-	player.clean();
+	exporter.clean();
 
 	SDL_Quit();
 	return 0;

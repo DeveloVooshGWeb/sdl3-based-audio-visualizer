@@ -17,15 +17,13 @@ struct MP4Data {
 	int vbitrate;
 	int abitrate;
 	int gop_size;
-	AVPixelFormat src_pfmt;
 	AVPixelFormat pix_fmt;
-	AVSampleFormat src_afmt;
 	AVSampleFormat smp_fmt;
 	string fpath;
-	char** flags;
+	string* flags;
 	size_t flag_len;
 	MP4Data() {};
-	MP4Data(int w, int h, int fr, int sr, int vbr, int abr, int gsz, AVPixelFormat pfmt, AVSampleFormat sfmt, string fp, char** fl, size_t fllen) : width(w), height(h), framerate(fr), samplerate(sr), vbitrate(vbr), abitrate(abr), gop_size(gsz), pix_fmt(pfmt), smp_fmt(sfmt), fpath(fp), flags(fl), flag_len(fllen) {};
+	MP4Data(int w, int h, int fr, int sr, int vbr, int abr, int gsz, AVPixelFormat pfmt, AVSampleFormat sfmt, string fp, string* fl, size_t fllen) : width(w), height(h), framerate(fr), samplerate(sr), vbitrate(vbr), abitrate(abr), gop_size(gsz), pix_fmt(pfmt), smp_fmt(sfmt), fpath(fp), flags(fl), flag_len(fllen) {};
 };
 
 class MP4Encoder
@@ -40,6 +38,7 @@ public:
 	void init_audio_write(AVSampleFormat sfmt);
 	int write_audio_samples(uint8_t* data, size_t sz, int64_t samples);
 	bool isWorking();
+	void finalize();
 
 private:
 	bool _working = false;

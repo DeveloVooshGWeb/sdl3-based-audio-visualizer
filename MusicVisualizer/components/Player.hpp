@@ -25,15 +25,6 @@ using namespace std;
 
 //double freq_bin[] = { 19.0, 140.0, 400.0, 2600.0, 5200.0, nyquist }
 
-typedef struct {
-	double* in;
-	fftw_complex* out;
-	double* magnitude;
-	fftw_plan p;
-	int startIdx;
-	int specSize;
-} streamData;
-
 class Player
 {
 public:
@@ -87,7 +78,7 @@ private:
 	void* audBuffer;
 	int audSize;
 	double sampleRatio;
-	
+	double sampleRate;
 
 	bool isRunning = true;
 };

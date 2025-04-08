@@ -11,6 +11,15 @@
 
 using namespace std;
 
+typedef struct {
+	double* in;
+	fftw_complex* out;
+	double* magnitude;
+	fftw_plan p;
+	int startIdx;
+	int specSize;
+} streamData;
+
 class FFTProcessor
 {
 public:

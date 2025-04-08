@@ -129,23 +129,17 @@ void Player::init()
 		return;
 	}
 	// Create pools along with frequency bins for each bucket
-	sampleRatio = audioSpec.freq;
-	processor = new FFTProcessor(sampleRatio, FFT_SIZE, bands, FREQ_START, FREQ_END);
+	sampleRate = audioSpec.freq;
+	processor = new FFTProcessor(sampleRate, FFT_SIZE, bands, FREQ_START, FREQ_END);
 	bins = (double*)malloc(processor->getBinSize() * sizeof(double));
 	bandFreqs = (double*)malloc((bands+1) * sizeof(double));
-	//magnitudes = (double*)malloc(bands * sizeof(double));
-	//decibelsBuf = (double*)malloc(FFT_SIZE / 2 * sizeof(double));
-	//decibels = (double*)malloc(bands * sizeof(double));
 	spectrum = (double*)malloc(bands * sizeof(double));
-	//normalSpectrum = (double*)malloc((FFT_SIZE / 2) * sizeof(double));
-	//sizes = (int*)malloc(buckets * sizeof(int));
-	//binSpacing = (FREQ_END - FREQ_START) / bands;
 	// Iterate frequency bins
 	//double logMin = log10(FREQ_START);
 	//double logMax = log10(FREQ_END);
 	double lastBin = processor->getBinSize() - 1;
-	double freqStart = processor->clamp(FREQ_START * FFT_SIZE / sampleRatio, 1.0, lastBin);
-	double freqEnd = processor->clamp(FREQ_END * FFT_SIZE / sampleRatio, 1.0, lastBin);
+	double freqStart = processor->clamp(FREQ_START * FFT_SIZE / sampleRate, 1.0, lastBin);
+	double freqEnd = processor->clamp(FREQ_END * FFT_SIZE / sampleRate, 1.0, lastBin);
 	for (int i = 0; i < bands; i++)
 	{
 		rectangles.push_back(SDL_FRect());
@@ -157,8 +151,6 @@ void Player::init()
 		//cout << bandFreqs[i] << endl;
 	}
 	bandFreqs[bands] = FREQ_END;
-	//freqBin[bands] = FREQ_END;
-	
 	processor->assign(bandFreqs, 0.5, 0.55);
 }
 

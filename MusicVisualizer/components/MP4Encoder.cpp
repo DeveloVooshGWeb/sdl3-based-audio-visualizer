@@ -18,7 +18,7 @@ MP4Encoder::MP4Encoder(MP4Data data)
 	_data = data;
 	for (size_t i = 0; i + 1 < _data.flag_len; i += 2)
 	{
-		av_dict_set(&_opt, _data.flags[i], _data.flags[i + 1], 0);
+		av_dict_set(&_opt, _data.flags[i].c_str(), _data.flags[i + 1].c_str(), 0);
 	}
 	avformat_alloc_output_context2(&_oc, NULL, NULL, _data.fpath.c_str());
 	if (!_oc) {
@@ -258,10 +258,6 @@ void MP4Encoder::_open_audio(const AVCodec* codec, OutputStream* ost)
 		return;
 	}
 
-	ost->t = 0;
-	ost->tincr = 2 * M_PI * 110.0 / c->sample_rate;
-	ost->tincr2 = 2 * M_PI * 110.0 / c->sample_rate / c->sample_rate;
-	
 	if (c->codec->capabilities && AV_CODEC_CAP_VARIABLE_FRAME_SIZE)
 	{
 		nb_samples = 10000;
@@ -432,6 +428,15 @@ int MP4Encoder::write_audio_samples(uint8_t* data, size_t sz, int64_t samples)
 			_working = false;
 			return 1;
 		}
+
+		r = swr_convert(ost->swr_ctx, ost->frame->data, dst_nb_samples, (const uint8_t**)frame->data, samples);
+		if (r < 0)
+		{
+			cout << "Error while converting" << endl;
+			_working = false;
+			return 1;
+		}
+
 		frame = ost->frame;
 
 		frame->pts = av_rescale_q(ost->samples_count, AVRational{ 1, c->sample_rate }, c->time_base);
@@ -449,6 +454,11 @@ void MP4Encoder::_close_stream(OutputStream* ost)
 	av_packet_free(&ost->tmp_pkt);
 	if (ost->sws_ctx) sws_freeContext(ost->sws_ctx);
 	swr_free(&ost->swr_ctx);
+}
+
+void MP4Encoder::finalize()
+{
+	_finalize();
 }
 
 void MP4Encoder::_finalize()
