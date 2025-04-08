@@ -1,6 +1,6 @@
 #include "Exporter.hpp"
 
-#include "../libs/minimp3_ex.h"
+#include "../libs/minimp3ext.hpp"
 
 Exporter::Exporter(SDL_Window* win, SDL_Renderer* ren, int width, int height, int framerate)
 {

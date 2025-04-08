@@ -1,6 +1,4 @@
 #include "SDL3/SDL.h"
-//#include "SDL3/SDL_main.h"
-#include "components/Player.hpp"
 #include "components/Exporter.hpp"
 
 static SDL_Window* window = NULL;

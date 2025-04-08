@@ -9,7 +9,7 @@
 
 using namespace std;
 
-struct MP4Data {
+typedef struct MP4Data {
 	int width;
 	int height;
 	int framerate;
@@ -24,7 +24,7 @@ struct MP4Data {
 	size_t flag_len;
 	MP4Data() {};
 	MP4Data(int w, int h, int fr, int sr, int vbr, int abr, int gsz, AVPixelFormat pfmt, AVSampleFormat sfmt, string fp, string* fl, size_t fllen) : width(w), height(h), framerate(fr), samplerate(sr), vbitrate(vbr), abitrate(abr), gop_size(gsz), pix_fmt(pfmt), smp_fmt(sfmt), fpath(fp), flags(fl), flag_len(fllen) {};
-};
+} MP4Data;
 
 class MP4Encoder
 {

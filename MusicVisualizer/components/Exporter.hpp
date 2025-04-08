@@ -14,15 +14,14 @@
 
 #define MINIMP3_IMPLEMENTATION
 
+#include "MP4Encoder.hpp"
 #include <iostream>
 #include "SDL3/SDL.h"
-#include "fftw3.h"
 #include <math.h>
 #include <algorithm>
 #include <stdio.h>
 #include <vector>
 #include "FFTProcessor.hpp"
-#include "MP4Encoder.hpp"
 
 using namespace std;
 
@@ -44,8 +43,8 @@ public:
 	void draw(double delta);
 	void clean();
 	void close();
-	void playSound();
-	void stopSound();
+	//void playSound();
+	//void stopSound();
 	bool loadMP3(string path);
 	bool loadWAV(string path);
 

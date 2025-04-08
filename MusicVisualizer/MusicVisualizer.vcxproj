@@ -142,7 +142,6 @@
     <ClCompile Include="components\FFTProcessor.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="components\MP4Encoder.cpp" />
-    <ClCompile Include="components\Player.cpp" />
     <ClCompile Include="components\Sound.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,9 +149,9 @@
     <ClInclude Include="libs\ffmpeg_imports.h" />
     <ClInclude Include="components\FFTProcessor.hpp" />
     <ClInclude Include="libs\minimp3.h" />
+    <ClInclude Include="libs\minimp3ext.hpp" />
     <ClInclude Include="libs\minimp3_ex.h" />
     <ClInclude Include="components\MP4Encoder.hpp" />
-    <ClInclude Include="components\Player.hpp" />
     <ClInclude Include="components\Sound.hpp" />
   </ItemGroup>
   <ItemGroup>

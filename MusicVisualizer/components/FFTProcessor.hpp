@@ -34,7 +34,7 @@ public:
 	void pipe(double* bins, double* output);
 	uint16_t getBinSize();
 
-	const double DB_MIN = 20.0f * log10(numeric_limits<float>::min());
+	double DB_MIN;
 	
 private:
 	void _generateCatmullRomWeights(float t);

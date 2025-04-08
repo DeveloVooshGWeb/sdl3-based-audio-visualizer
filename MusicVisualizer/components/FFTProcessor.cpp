@@ -2,6 +2,7 @@
 
 FFTProcessor::FFTProcessor(size_t sr, uint16_t ffts, uint16_t bs, uint16_t fStart, uint16_t fEnd)
 {
+	DB_MIN = 20.0f * log10(numeric_limits<float>::min());
 	_sampleRate = sr;
 	_fftSize = ffts;
 	_binSize = _fftSize / 2.0;

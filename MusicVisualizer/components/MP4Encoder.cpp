@@ -55,14 +55,14 @@ MP4Encoder::MP4Encoder(MP4Data data)
 		r = avio_open(&_oc->pb, _data.fpath.c_str(), AVIO_FLAG_WRITE);
 		if (r < 0)
 		{
-			cout << "Could not open: " << _data.fpath << ", " << r << endl;
+			cout << "Could not open: " << _data.fpath << ", " << av_err2str(r) << endl;
 			return;
 		}
 	}
 	r = avformat_write_header(_oc, &_opt);
 	if (r < 0)
 	{
-		cout << "Error occured when opening output file: " << _data.fpath << ", " << r << endl;
+		cout << "Error occured when opening output file: " << _data.fpath << ", " << av_err2str(r) << endl;
 		return;
 	}
 	_img_pixels = _data.width * _data.height;
@@ -92,7 +92,7 @@ bool MP4Encoder::isWorking()
 void MP4Encoder::_add_stream(OutputStream* ost, const AVCodec** codec, enum AVCodecID codec_id)
 {
 	AVCodecContext* c;
-	int i;
+	//int i;
 	*codec = avcodec_find_encoder(codec_id);
 	if (!(*codec))
 	{
@@ -469,4 +469,32 @@ void MP4Encoder::_finalize()
 	avio_closep(&_oc->pb);
 	avformat_free_context(_oc);
 	MP4Encoder::~MP4Encoder();
+}
+
+AVFrame* MP4Encoder::_alloc_frame(enum AVPixelFormat pix_fmt, int width, int height)
+{
+	AVFrame* frame;
+	int r;
+
+	frame = av_frame_alloc();
+	if (!frame)
+	{
+		cout << "Frame allocation failed" << endl;
+		_working = false;
+		return NULL;
+	}
+	
+	frame->format = pix_fmt;
+	frame->width = width;
+	frame->height = height;
+
+	r = av_frame_get_buffer(frame, 0);
+	if (r < 0)
+	{
+		cout << "Could not allocate frame data." << endl;
+		_working = false;
+		return NULL;
+	}
+
+	return frame;
 }
