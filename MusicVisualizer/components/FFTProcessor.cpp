@@ -81,6 +81,7 @@ void FFTProcessor::pipe(double* bins, double* output)
 	//_genericFunction(output);
 	//_interpolateCatmullRom();
 	_extractHighestMagnitudes(_curBands);
+	//_interpolateCatmullRom(_curBands);
 	_interpolateLinear(_curBands);
 	//copy(_curBands, _curBands + _bands, output);
 	_smoothingExponentialMovingAverage(output);

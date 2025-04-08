@@ -1,6 +1,6 @@
 ﻿#include "Player.hpp"
 
-#include "minimp3_ex.h"
+#include "../libs/minimp3_ex.h"
 
 streamData* Player::specData = (streamData*)malloc(sizeof(streamData));
 int Player::len = 0;
@@ -31,7 +31,7 @@ void SDLCALL Player::onAudioData(void* userdata, const SDL_AudioSpec* spec, floa
 		bytesElapsed += actualSize;
 		if (bytesElapsed > FFT_SIZE)
 		{
-			actualSize = FFT_SIZE;
+			actualSize = bytesElapsed - (bytesElapsed - FFT_SIZE);
 			bytesElapsed = FFT_SIZE;
 		}
 		//cout << actualSize << endl;
@@ -97,7 +97,7 @@ void Player::init()
 	}
 	specData->p = fftw_plan_dft_r2c_1d(FFT_SIZE, specData->in, specData->out, FFTW_ESTIMATE);
 	// Load MP3 to buffer;
-	if (!loadMP3("forever mst.mp3")) return;
+	if (!loadMP3("springcmastered.mp3")) return;
 	//if (!loadWAV("sunsetfmastered.wav")) return;
 	// Load WAV to buffer
 	sampleRatio = FFT_SIZE / (double)audioSpec.freq;
@@ -141,8 +141,8 @@ void Player::init()
 	//sizes = (int*)malloc(buckets * sizeof(int));
 	//binSpacing = (FREQ_END - FREQ_START) / bands;
 	// Iterate frequency bins
-	double logMin = log10(FREQ_START);
-	double logMax = log10(FREQ_END);
+	//double logMin = log10(FREQ_START);
+	//double logMax = log10(FREQ_END);
 	double lastBin = processor->getBinSize() - 1;
 	double freqStart = processor->clamp(FREQ_START * FFT_SIZE / sampleRatio, 1.0, lastBin);
 	double freqEnd = processor->clamp(FREQ_END * FFT_SIZE / sampleRatio, 1.0, lastBin);
@@ -159,7 +159,7 @@ void Player::init()
 	bandFreqs[bands] = FREQ_END;
 	//freqBin[bands] = FREQ_END;
 	
-	processor->assign(bandFreqs, 0.5, 0.6);
+	processor->assign(bandFreqs, 0.5, 0.55);
 }
 
 void Player::playSound()
@@ -229,6 +229,7 @@ void Player::update(double delta)
 		//SDL_RenderPoint(renderer, 1920.0/2.0 - (i-(FFT_SIZE / 2.0/2.0))*1.0, pain+256.0);
 	}
 	// Render
+	
 	SDL_RenderPresent(renderer);
 	
 }

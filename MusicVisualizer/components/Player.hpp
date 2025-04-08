@@ -1,9 +1,9 @@
 #ifndef Player_hpp
 #define Player_hpp
 #define _USE_MATH_DEFINES
-#define FREQ_START 45
-#define FREQ_END 17000
-#define FFT_SIZE 256
+#define FREQ_START 24
+#define FREQ_END 16000
+#define FFT_SIZE 1024
 
 #define BAR_WIDTH 6.0
 #define BAR_SPACE 3.0

@@ -1,70 +1,83 @@
-﻿  FFTProcessor.cpp
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\FFTProcessor.cpp(7,22): warning C4244: '=': conversion from 'double' to 'uint16_t', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\FFTProcessor.cpp(70,49): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\FFTProcessor.cpp(91,15): warning C4244: 'initializing': conversion from 'size_t' to 'double', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\FFTProcessor.cpp(244,34): warning C4244: '=': conversion from 'double' to 'uint16_t', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\FFTProcessor.cpp(233,24): warning C4101: 'lastMag': unreferenced local variable
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\FFTProcessor.cpp(233,14): warning C4101: 'lastFreq': unreferenced local variable
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\FFTProcessor.cpp(294,34): warning C4244: '=': conversion from 'double' to 'uint16_t', possible loss of data
+﻿  Exporter.cpp
+  FFTProcessor.cpp
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\FFTProcessor.cpp(7,22): warning C4244: '=': conversion from 'double' to 'uint16_t', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\FFTProcessor.cpp(70,49): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\FFTProcessor.cpp(92,15): warning C4244: 'initializing': conversion from 'size_t' to 'double', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\FFTProcessor.cpp(245,34): warning C4244: '=': conversion from 'double' to 'uint16_t', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\FFTProcessor.cpp(234,24): warning C4101: 'lastMag': unreferenced local variable
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\FFTProcessor.cpp(234,14): warning C4101: 'lastFreq': unreferenced local variable
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\FFTProcessor.cpp(295,34): warning C4244: '=': conversion from 'double' to 'uint16_t', possible loss of data
+  main.cpp
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\main.cpp(40,13): warning C4244: 'argument': conversion from 'const float' to 'Uint32', possible loss of data
+  MP4Encoder.cpp
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\MP4Encoder.cpp(94,6): warning C4101: 'i': unreferenced local variable
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\MP4Encoder.cpp(261,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\MP4Encoder.cpp(262,50): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\MP4Encoder.cpp(310,12): warning C4101: 'v': unreferenced local variable
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\MP4Encoder.cpp(310,9): warning C4101: 'i': unreferenced local variable
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\MP4Encoder.cpp(310,6): warning C4101: 'j': unreferenced local variable
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\MP4Encoder.cpp(339,64): warning C4244: '=': conversion from 'int64_t' to 'int', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\MP4Encoder.cpp(442,49): warning C4244: 'argument': conversion from 'double' to 'int64_t', possible loss of data
   Player.cpp
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(278,26): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(278,26): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(361,56): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(361,56): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(367,38): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(367,38): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(449,71): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(449,71): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(454,53): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(454,53): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(478,28): warning C4267: '-=': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(478,28): warning C4267: '-=': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(479,28): warning C4267: '-=': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(479,28): warning C4267: '-=': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(504,51): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(504,51): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(522,38): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(522,38): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(582,56): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(582,56): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(676,70): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(676,70): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(837,29): warning C4244: '=': conversion from 'uint64_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(837,29): warning C4244: '=': conversion from 'uint64_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(910,94): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(910,94): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(919,76): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(919,76): warning C4244: 'argument': conversion from 'uint64_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(934,41): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(934,41): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(935,33): warning C4267: '-=': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(935,33): warning C4267: '-=': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\minimp3_ex.h(962,29): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
-  (compiling source file 'Player.cpp')
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\libs\minimp3_ex.h(962,29): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file 'components/Player.cpp')
   
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(59,24): warning C4244: '=': conversion from 'uint64_t' to 'int', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(104,27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(108,4): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(133,31): warning C4244: 'argument': conversion from 'double' to 'size_t', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(210,90): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(216,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(217,12): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\Player.cpp(218,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\Player.cpp(59,24): warning C4244: '=': conversion from 'uint64_t' to 'int', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\Player.cpp(104,27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\Player.cpp(108,4): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\Player.cpp(133,31): warning C4244: 'argument': conversion from 'double' to 'size_t', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\Player.cpp(210,90): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\Player.cpp(216,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\Player.cpp(217,12): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\Player.cpp(218,23): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Sound.cpp
   Generating Code...
   MusicVisualizer.vcxproj -> D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\x64\Debug\MusicVisualizer.exe

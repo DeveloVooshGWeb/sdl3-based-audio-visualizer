@@ -18,30 +18,45 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="components\Exporter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sound.cpp">
+    <ClCompile Include="components\FFTProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FFTProcessor.cpp">
+    <ClCompile Include="components\MP4Encoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="components\Sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Player.hpp">
+    <ClInclude Include="components\Player.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sound.hpp">
+    <ClInclude Include="components\Sound.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="minimp3_ex.h">
+    <ClInclude Include="libs\minimp3_ex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="minimp3.h">
+    <ClInclude Include="libs\minimp3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FFTProcessor.hpp">
+    <ClInclude Include="components\FFTProcessor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\MP4Encoder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="libs\ffmpeg_imports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="components\Exporter.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

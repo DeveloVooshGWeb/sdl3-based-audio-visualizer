@@ -104,13 +104,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\VSLibs\fftw;D:\VSLibs\sdl3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\VSLibs\fftw;D:\VSLibs\ffmpeg-7.1.1-6\include;D:\VSLibs\sdl3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL3.lib;SDL3_test.lib;libfftw3-3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\VSLibs\sdl3\lib\x64;D:\VSLibs\fftw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL3.lib;SDL3_test.lib;libfftw3-3.lib;avcodec.lib;avdevice.lib;avfilter.lib;avformat.lib;avutil.lib;postproc.lib;swresample.lib;swscale.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\VSLibs\ffmpeg-7.1.1-6\lib;D:\VSLibs\sdl3\lib\x64;D:\VSLibs\fftw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -138,17 +138,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="FFTProcessor.cpp" />
+    <ClCompile Include="components\Exporter.cpp" />
+    <ClCompile Include="components\FFTProcessor.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="components\MP4Encoder.cpp" />
+    <ClCompile Include="components\Player.cpp" />
+    <ClCompile Include="components\Sound.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FFTProcessor.hpp" />
-    <ClInclude Include="minimp3.h" />
-    <ClInclude Include="minimp3_ex.h" />
-    <ClInclude Include="Player.hpp" />
-    <ClInclude Include="Sound.hpp" />
+    <ClInclude Include="components\Exporter.hpp" />
+    <ClInclude Include="libs\ffmpeg_imports.h" />
+    <ClInclude Include="components\FFTProcessor.hpp" />
+    <ClInclude Include="libs\minimp3.h" />
+    <ClInclude Include="libs\minimp3_ex.h" />
+    <ClInclude Include="components\MP4Encoder.hpp" />
+    <ClInclude Include="components\Player.hpp" />
+    <ClInclude Include="components\Sound.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="forever mst.mp3">
