@@ -104,8 +104,8 @@ void Exporter::init()
 	bandFreqs[bands] = FREQ_END;
 	processor->assign(bandFreqs, 0.5, 0.55);
 	totalSamples = audSize / sizeof(int16_t) / 2.0;
-	int fllen = 4;
-	string* fl = new string[fllen]{ "-preset", "ultrafast", "-crf", "0"};
+	int fllen = 0;
+	string* fl = NULL;
 	encoder = new MP4Encoder(MP4Data(WINDOW_WIDTH, WINDOW_HEIGHT, FPS, (int)sampleRate, VBR, ABR, GOP_SIZE, AV_PIX_FMT_YUV420P, AV_SAMPLE_FMT_S16, string("exporttest.mp4"), fl, fllen));
 	timeBase = 1.0 / FPS;
 	scrRect = SDL_Rect();
