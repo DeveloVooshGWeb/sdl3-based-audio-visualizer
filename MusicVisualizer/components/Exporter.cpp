@@ -104,52 +104,82 @@ void Exporter::init()
 	bandFreqs[bands] = FREQ_END;
 	processor->assign(bandFreqs, 0.5, 0.55);
 	totalSamples = audSize / sizeof(int16_t) / 2.0;
-	int fllen = 0;
-	string* fl = NULL;
-	encoder = new MP4Encoder(MP4Data(WINDOW_WIDTH, WINDOW_HEIGHT, FPS, (int)sampleRate, VBR, ABR, GOP_SIZE, AV_PIX_FMT_YUV420P, AV_SAMPLE_FMT_S16, string("exporttest.mp4"), fl, fllen));
+	fftFrame = (int16_t*)malloc(FFT_SIZE * 2.0 * sizeof(int16_t));
+	int fllen = 4;
+	string* fl = new string[fllen]{ "-preset", "ultrafast", "-crf", "0"};
+	encoder = new MP4Encoder(MP4Data(WINDOW_WIDTH, WINDOW_HEIGHT, FPS, (int)sampleRate, VBR, ABR, GOP_SIZE, NB_SAMPLES, AV_PIX_FMT_YUV420P, AV_SAMPLE_FMT_FLTP, string("exporttest.mp4"), fl, fllen));
 	timeBase = 1.0 / FPS;
 	scrRect = SDL_Rect();
 	scrRect.w = WINDOW_WIDTH;
 	scrRect.h = WINDOW_HEIGHT;
-	encoder->init_audio_write(AV_SAMPLE_FMT_S16);
 	encoder->init_video_write(AV_PIX_FMT_RGB24);
+	encoder->init_audio_write(AV_SAMPLE_FMT_S16);
+	NB_SAMPLES = encoder->get_audio_buffer_size();
+	audFrame = (uint8_t*)malloc(NB_SAMPLES * sizeof(int16_t) * 2);
 }
 
 void Exporter::update(double delta)
 {
 	// RENDERING
+	if (time >= 1.0)
+	{
+		cout << "Rendering frame: " << curFrame << endl;
+		time = 0;
+	}
 	size_t idx = curFrame * timeBase * sampleRate;
-	if (idx >= totalSamples)
+	if (idx + (FFT_SIZE * 2) >= totalSamples)
 	{
 		// Finalize
-		size_t diff = totalSamples - prevIdx;
+		/*size_t diff = totalSamples / 4 - prevIdx;
 		if (diff > 0)
 		{
-			encoder->write_audio_samples((uint8_t*)audBuffer + prevIdx, diff * sizeof(int16_t), diff);
+			encoder->write_audio_samples((uint8_t*)audBuffer + (prevIdx * sizeof(int16_t) * 2), diff * sizeof(int16_t) * 2, diff);
+		}*/
+		// Encode audio
+		size_t sz = NB_SAMPLES;
+		size_t len = floor(totalSamples / NB_SAMPLES);
+		for (size_t i = 0; i < len; i++)
+		{
+			idx = i * NB_SAMPLES;
+			if (i >= len - 1)
+			{
+				if (idx + NB_SAMPLES >= totalSamples)
+				{
+					size_t sz = totalSamples - idx;
+					size_t diff = NB_SAMPLES - sz;
+					for (int j = 0; j < diff; j++)
+					{
+						audFrame[sz + j] = 0;
+					}
+				}
+			}
+			memcpy(audFrame, (uint8_t*)audBuffer + (idx * sizeof(int16_t) * 2), sz * sizeof(int16_t) * 2);
+			cout << "Encoding audio frame " << i << " / " << len << endl;
+			encoder->write_audio_samples(audFrame, NB_SAMPLES * sizeof(int16_t) * 2, NB_SAMPLES);
 		}
 		encoder->finalize();
 		cout << "Finished rendering!";
 		isRunning = false;
 		return;
 	}
-	cout << "Rendering frame: " << curFrame << endl;
+	
 	if (audioSpec.format != SDL_AUDIO_S16)
 	{
 		cout << "Not a signed int16." << endl;
 		isRunning = false;
 		return;
 	}
-	memcpy(audFrame, (char*)audBuffer + idx, FFT_SIZE * 2 * sizeof(int16_t));
-	int16_t* audBufferI16 = static_cast<int16_t*>(audBuffer);
-	double d1, d2;
+	memcpy((uint8_t*)fftFrame, (uint8_t*)audBuffer + (idx * sizeof(int16_t) * 2), FFT_SIZE * sizeof(int16_t) * 2);
+	float d1, d2;
 	// Extract frames for FFT function
-	for (size_t i = 0; i < FFT_SIZE; i++)
+	for (int i = 0; i < FFT_SIZE; i++)
 	{
 		// Hann Function
 		double multiplier = 0.5 * (1 - cos(2 * M_PI * i / (FFT_SIZE - 1)));
-		d1 = audBufferI16[i * 2] / 32767.0;
-		d2 = audBufferI16[i * 2 + 1] / 32767.0;
+		d1 = (float)fftFrame[i * 2] / 32767.0f;
+		d2 = (float)fftFrame[i * 2 + 1] / 32767.0f;
 		specData->in[i] = multiplier * ((d1 + d2) / 2.0);
+		//cout << specData->in[i] << endl;
 	}
 	// Perform FFT
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -158,7 +188,7 @@ void Exporter::update(double delta)
 	fftw_execute(specData->p);
 	string toPrint = "";
 	// Calculate magnitudes
-	for (size_t i = 0; i < processor->getBinSize(); i++)
+	for (int i = 0; i < processor->getBinSize(); i++)
 	{
 		double real = specData->out[i][0];
 		double imag = specData->out[i][1];
@@ -191,6 +221,7 @@ void Exporter::update(double delta)
 		double pain = processor->toDb(bins[i]);
 		//SDL_RenderPoint(renderer, 1920.0/2.0 - (i-(FFT_SIZE / 2.0/2.0))*1.0, pain+256.0);
 	}
+	//SDL_RenderPresent(renderer);
 	// Render (Export instead of presenting to screen)
 	SDL_Surface* surface = SDL_RenderReadPixels(renderer, &scrRect);
 	SDL_PixelFormat pixFmt = SDL_PIXELFORMAT_RGB24;
@@ -201,16 +232,18 @@ void Exporter::update(double delta)
 	}
 	// Render to FFMPEG
 	if (surface) {
-		encoder->write_image_matrix((uint8_t**)surface->pixels, 3);
+		encoder->write_image_matrix((uint8_t**)surface->pixels);
 		SDL_DestroySurface(surface);
 	}
 	// Write Audio Samples
-	if (idx > 0)
+	/*if (idx > 0)
 	{
-		encoder->write_audio_samples(((uint8_t*)audBuffer) + prevIdx, (idx - prevIdx) * sizeof(int16_t), idx - prevIdx);
-	}
-	prevIdx = idx;
+		//cout << idx << endl;
+		encoder->write_audio_samples((uint8_t*)audBuffer + (prevIdx * sizeof(int16_t) * 2), (idx - prevIdx) * sizeof(int16_t) * 2, (idx - prevIdx));
+	}*/
+	//prevIdx = idx;
 	curFrame++;
+	time += delta;
 }
 
 void Exporter::draw(double delta)
@@ -224,6 +257,8 @@ void Exporter::clean()
 	fftw_destroy_plan(specData->p);
 	free(specData);
 	free(audBuffer);
+	free(audFrame);
+	free(fftFrame);
 	free(processor);
 	free(bandFreqs);
 	free(spectrum);

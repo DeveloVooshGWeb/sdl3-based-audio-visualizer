@@ -1,5 +1,9 @@
-﻿  MP4Encoder.cpp
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\MP4Encoder.cpp(369,49): warning C4244: 'argument': conversion from 'double' to 'int64_t', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\MP4Encoder.cpp(419,64): warning C4244: '=': conversion from 'int64_t' to 'int', possible loss of data
-D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\components\MP4Encoder.cpp(429,97): warning C4244: 'argument': conversion from 'int64_t' to 'int', possible loss of data
+﻿  main.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\crtdbg.h(307,17): warning C4005: '_malloca': macro redefinition
+  (compiling source file 'main.cpp')
+      C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\ucrt\malloc.h(120,17):
+      see previous definition of '_malloca'
+  
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\main.cpp(38,17): warning C4244: 'initializing': conversion from 'Uint64' to 'double', possible loss of data
+D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\MusicVisualizer\main.cpp(42,11): warning C4244: '=': conversion from 'double' to 'Uint64', possible loss of data
   MusicVisualizer.vcxproj -> D:\Users\PC\Documents\Visual Studio 2022 Projects\MusicVisualizer\x64\Debug\MusicVisualizer.exe

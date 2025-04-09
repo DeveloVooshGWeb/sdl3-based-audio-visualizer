@@ -35,11 +35,12 @@ int main() {
 		while (SDL_PollEvent(event)) {
 			exporter.eventCall(event);
 		}
-		double delta = (double)((SDL_GetTicks() - ticks)) / 1000;
+		double cTicks = SDL_GetTicks();
+		double delta = ((cTicks - ticks) / 1000.0);
 		exporter.update(delta);
 		exporter.draw(delta);
-		ticks = SDL_GetTicks();
-		SDL_Delay(fps);
+		ticks = cTicks;
+		//SDL_Delay(fps);
 	}
 	exporter.clean();
 

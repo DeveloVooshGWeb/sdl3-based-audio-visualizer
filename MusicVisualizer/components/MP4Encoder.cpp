@@ -37,6 +37,7 @@ MP4Encoder::MP4Encoder(MP4Data data)
 	}
 	else
 	{
+		cout << "No video" << endl;
 		return;
 	}
 	if (_fmt->audio_codec != AV_CODEC_ID_NONE)
@@ -45,6 +46,7 @@ MP4Encoder::MP4Encoder(MP4Data data)
 	}
 	else
 	{
+		cout << "No audio" << endl;
 		return;
 	}
 	_open_video(_vcodec, &_video_st);
@@ -177,7 +179,7 @@ int MP4Encoder::_write_frame(AVCodecContext* c, AVStream* st, AVFrame* frame, AV
 	r = avcodec_send_frame(c, frame);
 	if (r < 0)
 	{
-		cout << "Error sending a frame to the encoder!, " << r << endl;
+		cout << "Error sending a frame to the encoder!, " << av_err2str(r) << endl;
 		_working = false;
 		return 1;
 	}
@@ -255,7 +257,7 @@ void MP4Encoder::_open_audio(const AVCodec* codec, OutputStream* ost)
 		return;
 	}
 
-	if (c->codec->capabilities && AV_CODEC_CAP_VARIABLE_FRAME_SIZE)
+	if (c->codec->capabilities & AV_CODEC_CAP_VARIABLE_FRAME_SIZE)
 	{
 		nb_samples = 10000;
 	}
@@ -322,18 +324,6 @@ void MP4Encoder::_open_video(const AVCodec* codec, OutputStream* ost)
 		return;
 	}
 
-	ost->tmp_frame = NULL;
-	if (c->pix_fmt != AV_PIX_FMT_YUV420P)
-	{
-		ost->tmp_frame = _alloc_frame(AV_PIX_FMT_YUV420P, c->width, c->height);
-		if (!ost->tmp_frame)
-		{
-			cout << "Could not allocate temporary video frame" << endl;
-			_working = false;
-			return;
-		}
-	}
-
 	r = avcodec_parameters_from_context(ost->st->codecpar, c);
 	if (r < 0)
 	{
@@ -348,28 +338,41 @@ void MP4Encoder::init_video_write(AVPixelFormat pfmt)
 	OutputStream* ost = &_video_st;
 	AVCodecContext* c = ost->enc;
 
-	if (!ost->sws_ctx)
+	src_pfmt = pfmt;
+
+	ost->tmp_frame = NULL;
+	if (c->pix_fmt != pfmt)
 	{
-		ost->sws_ctx = sws_getContext(c->width, c->height, pfmt, c->width, c->height, c->pix_fmt, SCALE_FLAGS, NULL, NULL, NULL);
-		if (!ost->sws_ctx)
+		ost->tmp_frame = _alloc_frame(src_pfmt, c->width, c->height);
+		if (!ost->tmp_frame)
 		{
-			cout << "Could not initialize the conversion context" << endl;
+			cout << "Could not allocate temporary video frame" << endl;
 			_working = false;
 			return;
 		}
 	}
+
+	ost->sws_ctx = sws_getContext(c->width, c->height, src_pfmt, c->width, c->height, c->pix_fmt, SCALE_FLAGS, NULL, NULL, NULL);
+	if (!ost->sws_ctx)
+	{
+		cout << "Could not initialize the conversion context" << endl;
+		_working = false;
+		return;
+	}
 }
 
-int MP4Encoder::write_image_matrix(uint8_t** data, uint8_t channels)
+int MP4Encoder::write_image_matrix(void* data)
 {
 	OutputStream* ost = &_video_st;
 	AVCodecContext* c = ost->enc;
 
 	// (1.0 - stream duration)
+	/*
 	if (av_compare_ts(ost->next_pts, c->time_base, 1.0, AVRational{ 1, 1 }) > 0)
 	{
 		return 1;
 	}
+	*/
 
 	if (av_frame_make_writable(ost->frame) < 0)
 	{
@@ -377,12 +380,14 @@ int MP4Encoder::write_image_matrix(uint8_t** data, uint8_t channels)
 		return 1;
 	}
 
-	for (uint8_t i = 0; i < channels; i++)
+	switch (src_pfmt)
 	{
-		for (uint8_t j = 0; j < _img_pixels; j++)
-		{
-			ost->tmp_frame->data[i][j] = data[i][j];
-		}
+		case AV_PIX_FMT_RGB24:
+			for (size_t i = 0; i < _img_pixels * 3; i++)
+			{
+				ost->tmp_frame->data[0][i] = ((uint8_t*)data)[i];
+			}
+			break;
 	}
 
 	sws_scale(ost->sws_ctx, (const uint8_t* const*)ost->tmp_frame->data, ost->tmp_frame->linesize, 0, c->height, ost->frame->data, ost->frame->linesize);
@@ -390,6 +395,11 @@ int MP4Encoder::write_image_matrix(uint8_t** data, uint8_t channels)
 	ost->frame->pts = ost->next_pts++;
 	
 	return _write_frame(c, ost->st, ost->frame, ost->tmp_pkt);
+}
+
+int MP4Encoder::get_audio_buffer_size()
+{
+	return _audio_st.frame->nb_samples;
 }
 
 void MP4Encoder::init_audio_write(AVSampleFormat sfmt)
@@ -401,6 +411,7 @@ void MP4Encoder::init_audio_write(AVSampleFormat sfmt)
 
 int MP4Encoder::write_audio_samples(uint8_t* data, size_t sz, int64_t samples)
 {
+	cout << samples << endl;
 	OutputStream* ost = &_audio_st;
 	AVCodecContext* c = ost->enc;
 	int r;
@@ -412,12 +423,12 @@ int MP4Encoder::write_audio_samples(uint8_t* data, size_t sz, int64_t samples)
 		q[i] = data[i];
 	}
 	frame->pts = ost->next_pts;
-	ost->next_pts += samples;
+	ost->next_pts += frame->nb_samples;
 
 	if (frame)
 	{
-		dst_nb_samples = swr_get_delay(ost->swr_ctx, c->sample_rate) + samples;
-		av_assert0(dst_nb_samples == samples);
+		dst_nb_samples = swr_get_delay(ost->swr_ctx, c->sample_rate) + frame->nb_samples;
+		av_assert0(dst_nb_samples == frame->nb_samples);
 		r = av_frame_make_writable(ost->frame);
 		if (r < 0)
 		{
@@ -426,7 +437,7 @@ int MP4Encoder::write_audio_samples(uint8_t* data, size_t sz, int64_t samples)
 			return 1;
 		}
 
-		r = swr_convert(ost->swr_ctx, ost->frame->data, dst_nb_samples, (const uint8_t**)frame->data, samples);
+		r = swr_convert(ost->swr_ctx, ost->frame->data, dst_nb_samples, (const uint8_t**)frame->data, frame->nb_samples);
 		if (r < 0)
 		{
 			cout << "Error while converting" << endl;
@@ -447,9 +458,9 @@ void MP4Encoder::_close_stream(OutputStream* ost)
 {
 	avcodec_free_context(&ost->enc);
 	av_frame_free(&ost->frame);
-	if (ost->tmp_frame)	av_frame_free(&ost->tmp_frame);
+	av_frame_free(&ost->tmp_frame);
 	av_packet_free(&ost->tmp_pkt);
-	if (ost->sws_ctx) sws_freeContext(ost->sws_ctx);
+	sws_freeContext(ost->sws_ctx);
 	swr_free(&ost->swr_ctx);
 }
 
@@ -461,10 +472,10 @@ void MP4Encoder::finalize()
 void MP4Encoder::_finalize()
 {
 	av_write_trailer(_oc);
-	_close_stream(&_video_st);
-	_close_stream(&_audio_st);
 	avio_closep(&_oc->pb);
 	avformat_free_context(_oc);
+	_close_stream(&_video_st);
+	_close_stream(&_audio_st);
 	MP4Encoder::~MP4Encoder();
 }
 

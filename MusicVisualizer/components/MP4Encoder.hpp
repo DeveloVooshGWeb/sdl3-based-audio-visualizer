@@ -17,13 +17,14 @@ typedef struct MP4Data {
 	int vbitrate;
 	int abitrate;
 	int gop_size;
+	int nb_samples;
 	AVPixelFormat pix_fmt;
 	AVSampleFormat smp_fmt;
 	string fpath;
 	string* flags;
 	size_t flag_len;
 	MP4Data() {};
-	MP4Data(int w, int h, int fr, int sr, int vbr, int abr, int gsz, AVPixelFormat pfmt, AVSampleFormat sfmt, string fp, string* fl, size_t fllen) : width(w), height(h), framerate(fr), samplerate(sr), vbitrate(vbr), abitrate(abr), gop_size(gsz), pix_fmt(pfmt), smp_fmt(sfmt), fpath(fp), flags(fl), flag_len(fllen) {};
+	MP4Data(int w, int h, int fr, int sr, int vbr, int abr, int gsz, int nbsmps, AVPixelFormat pfmt, AVSampleFormat sfmt, string fp, string* fl, size_t fllen) : width(w), height(h), framerate(fr), samplerate(sr), vbitrate(vbr), abitrate(abr), gop_size(gsz), nb_samples(nbsmps), pix_fmt(pfmt), smp_fmt(sfmt), fpath(fp), flags(fl), flag_len(fllen) {};
 } MP4Data;
 
 class MP4Encoder
@@ -34,9 +35,10 @@ public:
 	
 	//void log_packet(const AVFormatContext* fmt_ctx, const AVPacket* pkt);
 	void init_video_write(AVPixelFormat pfmt);
-	int write_image_matrix(uint8_t** data, uint8_t channels);
+	int write_image_matrix(void* data);
 	void init_audio_write(AVSampleFormat sfmt);
 	int write_audio_samples(uint8_t* data, size_t sz, int64_t samples);
+	int get_audio_buffer_size();
 	bool isWorking();
 	void finalize();
 
@@ -50,7 +52,8 @@ private:
 	const AVCodec* _acodec;
 	const AVCodec* _vcodec;
 	AVDictionary* _opt = NULL;
-	int _img_pixels;
+	AVPixelFormat src_pfmt;
+	size_t _img_pixels;
 
 	void _log_packet(const AVFormatContext* fmt_ctx, const AVPacket* pkt);
 

@@ -66,7 +66,8 @@ private:
 	double sampleRatio;
 	double sampleRate;
 	int curFrame;
-	void* audFrame;
+	int16_t* fftFrame;
+	uint8_t* audFrame;
 	size_t totalSamples;
 	int WINDOW_WIDTH;
 	int WINDOW_HEIGHT;
@@ -74,6 +75,8 @@ private:
 	SDL_Rect scrRect;
 	double timeBase;
 	size_t prevIdx;
+	int NB_SAMPLES;
+	double time;
 
 	bool isRunning = true;
 };
